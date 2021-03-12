@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package misc.time.proto;
+
+option go_package = "github.com/platsko/go-kit/timestamp/proto/pb";
+
+message Timestamp {
+  bytes blob = 1;
+}
