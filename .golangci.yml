@@ -8,7 +8,9 @@ linters:
     - exhaustivestruct
     - gci
     - gofumpt
+    - interfacer
     - lll
+    - maligned
     - wrapcheck
 
 issues:
