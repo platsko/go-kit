@@ -1,0 +1,29 @@
+output:
+  format: colored-line-number
+  sort-results: true
+
+linters:
+  enable-all: true
+  disable:
+    - exhaustivestruct
+    - gci
+    - gofumpt
+    - lll
+    - wrapcheck
+
+issues:
+  exclude-rules:
+    # Exclude some linters from running on tests files.
+    - path: _test\.go
+      linters:
+        - dupl
+        - errorlint
+        - gochecknoglobals
+        - goerr113
+        - funlen
+        - nlreturn
+        - wsl
+
+linters-settings:
+  maligned:
+    suggest-new: true
