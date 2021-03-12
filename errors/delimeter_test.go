@@ -8,6 +8,10 @@ import (
 	. "github.com/platsko/go-kit/errors"
 )
 
+var (
+	defaultDelimiter = GetDelimiter()
+)
+
 func Benchmark_GetDelimiter(tb *testing.B) {
 	for i := 0; i < tb.N; i++ {
 		_ = GetDelimiter()
@@ -15,8 +19,10 @@ func Benchmark_GetDelimiter(tb *testing.B) {
 }
 
 func Benchmark_SetDelimiter(tb *testing.B) {
+	delim := GetDelimiter()
+	tb.ResetTimer()
 	for i := 0; i < tb.N; i++ {
-		SetDelimiter(errDelimiter)
+		SetDelimiter(delim)
 	}
 }
 
@@ -29,7 +35,7 @@ func Test_GetDelimiter(t *testing.T) {
 	}{
 		{
 			name: "Default",
-			want: ": ",
+			want: defaultDelimiter,
 		},
 	}
 
@@ -51,12 +57,10 @@ func Test_SetDelimiter(t *testing.T) {
 	tests := [1]struct {
 		name  string
 		delim string
-		want  string
 	}{
 		{
 			name:  "OK",
 			delim: " | ",
-			want:  " | ",
 		},
 	}
 
@@ -65,11 +69,12 @@ func Test_SetDelimiter(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			SetDelimiter(test.delim)
-			if got := GetDelimiter(); got != test.want {
-				t.Errorf("SetDelimiter() got: %v | want: %v", got, test.want)
+			delim := GetDelimiter()  // save current delimiter
+			SetDelimiter(test.delim) // set test delimiter
+			if got := GetDelimiter(); got != test.delim {
+				t.Errorf("GetDictRand() got: %v | want: %v", got, test.delim)
 			}
-			SetDelimiter(": ") // restore default
+			SetDelimiter(delim) // restore previous delimiter
 		})
 	}
 }

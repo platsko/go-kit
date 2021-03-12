@@ -17,8 +17,7 @@ const (
 )
 
 var (
-	errDelimiter  = GetDelimiter()
-	wrapFmtFormat = "%s" + errDelimiter + "%w"
+	wrapFmtLibFormat = "%s" + defaultDelimiter + "%w"
 )
 
 func Benchmark_As(tb *testing.B) {
@@ -71,7 +70,7 @@ func Benchmark_FmtErrorf_Wrap(tb *testing.B) {
 	wrapErr := New(wrapErrorMsg)
 	tb.ResetTimer()
 	for i := 0; i < tb.N; i++ {
-		_ = fmt.Errorf(wrapFmtFormat, testErrorMsg, wrapErr)
+		_ = fmt.Errorf(wrapFmtLibFormat, testErrorMsg, wrapErr)
 	}
 }
 
@@ -236,7 +235,7 @@ func Test_WrapErr(t *testing.T) {
 			name: "EQUAL",
 			text: testErrorMsg,
 			wrap: errors.New(wrapErrorMsg),
-			want: errors.New(testErrorMsg + errDelimiter + wrapErrorMsg).Error(),
+			want: errors.New(testErrorMsg + defaultDelimiter + wrapErrorMsg).Error(),
 		},
 	}
 
@@ -265,7 +264,7 @@ func Test_WrapStr(t *testing.T) {
 			name: "EQUAL",
 			text: testErrorMsg,
 			wrap: wrapErrorMsg,
-			want: errors.New(testErrorMsg + errDelimiter + wrapErrorMsg).Error(),
+			want: errors.New(testErrorMsg + defaultDelimiter + wrapErrorMsg).Error(),
 		},
 	}
 

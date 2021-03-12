@@ -43,11 +43,11 @@ func Test_wrapper_Error(t *testing.T) {
 	}{
 		{
 			name: "OK",
-			want: errors.New(testErrorMsg + errDelimiter + wrapErrorMsg).Error(),
+			want: errors.New(testErrorMsg + defaultDelimiter + wrapErrorMsg).Error(),
 		},
 		{
 			name:    "ERR",
-			want:    errors.New(wrapErrorMsg + errDelimiter + testErrorMsg).Error(),
+			want:    errors.New(wrapErrorMsg + defaultDelimiter + testErrorMsg).Error(),
 			wantErr: true,
 		},
 	}
