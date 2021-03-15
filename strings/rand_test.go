@@ -37,11 +37,12 @@ func Test_RandString(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			dict := GetDictRand()  // save current dictionary
-			SetDictRand(test.dict) // set test dictionary
-			got := RandString(test.size)
-			SetDictRand(dict) // restore previous dictionary
-			if len(got) != test.size {
+			dict := GetDictRand()        // save current dictionary
+			SetDictRand(test.dict)       // set test dictionary
+			got := RandString(test.size) // rand by test dictionary
+			SetDictRand(dict)            // restore previous dictionary
+
+			if len(got) != test.size { // check expected size
 				t.Errorf("RandString() size: %v | want: %v", got, test.size)
 			}
 			if out := strings.Trim(got, test.dict); out != "" {

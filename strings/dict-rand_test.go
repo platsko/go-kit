@@ -71,10 +71,12 @@ func Test_SetDictRand(t *testing.T) {
 
 			dict := GetDictRand()  // save current dictionary
 			SetDictRand(test.dict) // set test dictionary
-			if got := GetDictRand(); got != test.dict {
-				t.Errorf("GetDictRand() got: %v | want: %v", got, test.dict)
+			got := GetDictRand()   // get test dictionary
+			SetDictRand(dict)      // restore previous dictionary
+
+			if got != test.dict { // check test dictionary
+				t.Errorf("SetDictRand() got: %v | want: %v", got, test.dict)
 			}
-			SetDictRand(dict) // restore previous dictionary
 		})
 	}
 }

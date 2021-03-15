@@ -2,18 +2,28 @@
 
 package strings
 
+import (
+	"sync"
+)
+
 var (
-	dictRandChar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" // nolint: gochecknoglobals
-	dictRandSize = len(dictRandChar)                                      // nolint: gochecknoglobals
+	dictRandChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" // nolint: gochecknoglobals
+
+	rwDictMutex = sync.RWMutex{} // nolint: gochecknoglobals
 )
 
 // GetDictRand returns current use dictionary chars for rand.
 func GetDictRand() string {
-	return dictRandChar
+	rwDictMutex.Lock()
+	dict := dictRandChars
+	rwDictMutex.Unlock()
+
+	return dict
 }
 
 // SetDictRand sets new dictionary chars to use for rand.
 func SetDictRand(s string) {
-	dictRandChar = s
-	dictRandSize = len(dictRandChar)
+	rwDictMutex.RLock()
+	dictRandChars = s
+	rwDictMutex.RUnlock()
 }

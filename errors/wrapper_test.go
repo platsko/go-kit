@@ -23,7 +23,7 @@ func Benchmark_wrapper_Error(tb *testing.B) {
 
 func Benchmark_wrapper_Unwrap(tb *testing.B) {
 	wrapErr := WrapErr(wrapErrorMsg, New(testErrorMsg))
-	err, ok := wrapErr.(Wrapper)
+	err, ok := wrapErr.(Wrapper) // nolint: errorlint
 	if !ok {
 		log.Fatal("got not wrapper interface")
 	}

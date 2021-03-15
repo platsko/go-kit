@@ -215,7 +215,7 @@ func Test_Unwrap(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := Unwrap(test.err); got != test.want {
+			if got := Unwrap(test.err); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("Unwrap() got: %#v | want: %#v", got, test.want)
 			}
 		})
