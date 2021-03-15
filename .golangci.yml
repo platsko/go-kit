@@ -19,7 +19,6 @@ issues:
     - path: _test\.go
       linters:
         - dupl
-        - errorlint
         - gochecknoglobals
         - goerr113
         - funlen
