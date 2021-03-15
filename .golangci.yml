@@ -11,7 +11,9 @@ linters:
     - interfacer
     - lll
     - maligned
+    - wastedassign
     - wrapcheck
+    - wsl
 
 issues:
   exclude-rules:
