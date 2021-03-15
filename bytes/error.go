@@ -1,6 +1,6 @@
 // Copyright © 2020-2021 The EVEN Solutions Developers Team
 
-package crypto
+package bytes
 
 import (
 	"github.com/platsko/go-kit/errors"
