@@ -71,10 +71,12 @@ func Test_SetDelimiter(t *testing.T) {
 
 			delim := GetDelimiter()  // save current delimiter
 			SetDelimiter(test.delim) // set test delimiter
-			if got := GetDelimiter(); got != test.delim {
-				t.Errorf("GetDictRand() got: %v | want: %v", got, test.delim)
+			got := GetDelimiter()    // get test delimiter
+			SetDelimiter(delim)      // restore previous delimiter
+
+			if got != test.delim { // check test delimiter
+				t.Errorf("SetDelimiter() got: %v | want: %v", got, test.delim)
 			}
-			SetDelimiter(delim) // restore previous delimiter
 		})
 	}
 }

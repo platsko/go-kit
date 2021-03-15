@@ -21,7 +21,7 @@ func TestBytea32(t *testing.T) {
 		data [32]byte
 	}{
 		{
-			name: "TestBytea32_OK",
+			name: "OK",
 			data: data,
 		},
 	}
@@ -55,7 +55,7 @@ func TestBytea64(t *testing.T) {
 		data [64]byte
 	}{
 		{
-			name: "TestBytea64_OK",
+			name: "OK",
 			data: data,
 		},
 	}
@@ -89,7 +89,7 @@ func TestBytes(t *testing.T) {
 		data []byte
 	}{
 		{
-			name: "TestBytes_OK",
+			name: "OK",
 			data: data,
 		},
 	}

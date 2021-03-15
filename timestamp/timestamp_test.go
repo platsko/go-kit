@@ -188,10 +188,8 @@ func Test_DecodeTimestamp(t *testing.T) {
 			name: "version_Unsupported_ERR",
 			pbuf: func() *pb.Timestamp {
 				blob := make([]byte, 16)
-				// byte on 0 position encodes version
-				// 15 version is unsupported
-				blob[0] = 15
-
+				// byte on index=0 position encodes version
+				blob[0] = 15 // 15 is unsupported version
 				return &pb.Timestamp{Blob: blob}
 			}(),
 			wantErr: true,
@@ -246,9 +244,8 @@ func Test_Timestamp_Decode(t *testing.T) {
 			name: "version_Unsupported_ERR",
 			pbuf: func() *pb.Timestamp {
 				blob := make([]byte, 16)
-				// byte on 0 position encodes version
-				// 15 version is unsupported
-				blob[0] = 15
+				// byte on index=0 position encodes version
+				blob[0] = 15 // 15 is unsupported version
 				return &pb.Timestamp{Blob: blob}
 			}(),
 			wantErr: true,
