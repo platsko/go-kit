@@ -30,17 +30,6 @@ func Benchmark_NewEqualer(tb *testing.B) {
 	}
 }
 
-func Benchmark_equaler_Equals(tb *testing.B) {
-	const size = 1024
-	blob := bytes.RandBytes(size)
-	equ1 := NewEqualer(blob)
-	equ2 := NewEqualer(blob)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
-		_ = equ1.Equals(equ2)
-	}
-}
-
 func Benchmark_equaler_Raw(tb *testing.B) {
 	const size = 1024
 	blob := bytes.RandBytes(size)
@@ -59,7 +48,7 @@ func Test_BasicEqual(t *testing.T) {
 	const size = 1024
 	blob := bytes.RandBytes(size)
 
-	tests := [4]struct {
+	tests := [7]struct {
 		name string
 		equ1 Equaler
 		equ2 Equaler
@@ -72,19 +61,35 @@ func Test_BasicEqual(t *testing.T) {
 			want: true,
 		},
 		{
+			name: "nil_Equalers_TRUE",
+			equ1: nil,
+			equ2: nil,
+			want: true,
+		},
+		{
 			name: "FALSE",
 			equ1: NewEqualer(blob),
 			equ2: NewEqualer(bytes.RandBytes(size)),
 		},
 		{
-			name: "nil_first_Equaler_FALSE",
-			equ1: NewEqualer(nil),
+			name: "nil_Equ1_FALSE",
+			equ1: nil,
 			equ2: NewEqualer(blob),
 		},
 		{
-			name: "nil_second_Equaler_FALSE",
+			name: "nil_Equ2_FALSE",
 			equ1: NewEqualer(blob),
-			equ2: NewEqualer(nil),
+			equ2: nil,
+		},
+		{
+			name: "zero_size_Equ1_FALSE",
+			equ1: NewEqualer(make([]byte, 0)),
+			equ2: NewEqualer(blob),
+		},
+		{
+			name: "zero_size_Equ2_FALSE",
+			equ1: NewEqualer(blob),
+			equ2: NewEqualer(make([]byte, 0)),
 		},
 	}
 
@@ -131,43 +136,6 @@ func Test_NewEqualer(t *testing.T) {
 	}
 }
 
-func Test_equaler_Equals(t *testing.T) {
-	t.Parallel()
-
-	const size = 1024
-	blob := bytes.RandBytes(size)
-
-	tests := [2]struct {
-		name string
-		equ1 Equaler
-		equ2 Equaler
-		want bool
-	}{
-		{
-			name: "TRUE",
-			equ1: NewEqualer(blob),
-			equ2: NewEqualer(blob),
-			want: true,
-		},
-		{
-			name: "FALSE",
-			equ1: NewEqualer(blob),
-			equ2: NewEqualer(bytes.RandBytes(size)),
-		},
-	}
-
-	for idx := range tests {
-		test := tests[idx]
-		t.Run(test.name, func(t *testing.T) {
-			t.Parallel()
-
-			if got := test.equ1.Equals(test.equ2); got != test.want {
-				t.Errorf("Equals() got: %v | want: %v", got, test.want)
-			}
-		})
-	}
-}
-
 func Test_equaler_Raw(t *testing.T) {
 	t.Parallel()
 
@@ -203,7 +171,7 @@ func Test_equaler_Raw(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, test.want) {
-				t.Errorf("Raw() got: %v | want: %v", got, test.want)
+				t.Errorf("Raw() got: %#v | want: %#v", got, test.want)
 			}
 		})
 	}

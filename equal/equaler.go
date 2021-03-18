@@ -12,10 +12,7 @@ import (
 type (
 	// Equaler represents equaler interface.
 	Equaler interface {
-		// Equals checks whether two equalers are the same.
-		Equals(Equaler) bool
-
-		// Raw returns the copy of raw bytes data.
+		// Raw returns a copy of the raw bytes of the implementation.
 		Raw() ([]byte, error)
 	}
 
@@ -28,13 +25,21 @@ type (
 // BasicEqual reports whether e1 and e2 are the same length
 // and contain the same bytes, nil argument is equivalent to an empty slice.
 func BasicEqual(e1, e2 Equaler) bool {
+	if e1 == nil { // wrap nil pointer into Equaler interface to avoid panic
+		e1 = NewEqualer(nil)
+	}
+
+	if e2 == nil { // wrap nil pointer into Equaler interface to avoid panic
+		e2 = NewEqualer(nil)
+	}
+
 	b1, err := e1.Raw()
-	if err != nil {
+	if err != nil && !errors.Is(err, errors.ErrNilPointerValue()) { // ignore nil pointer error
 		return false
 	}
 
 	b2, err := e2.Raw()
-	if err != nil {
+	if err != nil && !errors.Is(err, errors.ErrNilPointerValue()) { // ignore nil pointer error
 		return false
 	}
 
@@ -46,15 +51,14 @@ func NewEqualer(blob []byte) Equaler {
 	return &equaler{blob: blob}
 }
 
-// Equals implements Equaler.Equals method of interface.
-func (e *equaler) Equals(compare Equaler) bool {
-	return BasicEqual(e, compare)
-}
-
 // Raw implements Equaler.Raw method of interface.
 func (e *equaler) Raw() ([]byte, error) {
 	if e.blob == nil {
 		return nil, errors.ErrNilPointerValue()
+	}
+
+	if len(e.blob) == 0 { // enforce this error for unit testing
+		return nil, ErrZeroSizeValue()
 	}
 
 	blob := make([]byte, len(e.blob))

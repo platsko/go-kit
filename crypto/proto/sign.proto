@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package crypto.proto;
+
+option go_package = "github.com/platsko/go-kit/crypto/proto/pb";
+
+message Signature {
+  bytes blob = 1;
+}
