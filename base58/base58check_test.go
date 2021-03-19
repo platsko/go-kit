@@ -3,109 +3,181 @@
 package base58_test
 
 import (
+	"crypto/sha256"
+	"reflect"
 	"testing"
 
-	"github.com/platsko/go-kit/base58"
+	. "github.com/platsko/go-kit/base58"
+	"github.com/platsko/go-kit/bytes"
 	"github.com/platsko/go-kit/errors"
 )
 
-func TestBase58Check(t *testing.T) {
+func Benchmark_CheckDecode(tb *testing.B) {
+	base58 := []byte(strBase58)
+	tb.ResetTimer()
+	for i := 0; i < tb.N; i++ {
+		if _, _, err := CheckDecode(base58); err != nil {
+			tb.Fatal(err)
+		}
+	}
+}
+
+func Benchmark_CheckEncode(tb *testing.B) {
+	blob, ver, err := CheckDecode([]byte(strBase58))
+	if err != nil {
+		tb.Fatal(err)
+	}
+	tb.ResetTimer()
+	for i := 0; i < tb.N; i++ {
+		_ = CheckEncode(blob, ver)
+	}
+}
+
+func Benchmark_Checksum(tb *testing.B) {
+	base58 := []byte(strBase58)
+	tb.ResetTimer()
+	for i := 0; i < tb.N; i++ {
+		_ = Checksum(base58)
+	}
+}
+
+func Test_CheckDecode(t *testing.T) {
 	t.Parallel()
 
-	tests := [11]struct {
-		version byte
-		in      string
-		out     string
+	type (
+		testCase struct {
+			name    string
+			blob    []byte
+			want    []byte
+			wantVer byte
+			wantErr error
+		}
+		testList []testCase
+	)
+
+	cases := mockTestCaseCheckBase58()
+	tests := make(testList, 0, len(cases)+7)
+	for _, c := range cases {
+		tests = append(tests, testCase{
+			name:    c.want + "_OK",
+			blob:    []byte(c.want),
+			want:    []byte(c.base),
+			wantVer: byte(20),
+		})
+	}
+
+	// append test unknown format error
+	tests = append(tests, testCase{
+		name:    ErrUnknownFormatMsg + "_ERR",
+		blob:    []byte("3MNQE10"),
+		wantErr: ErrUnknownFormat(),
+	})
+
+	// append test checksum error
+	tests = append(tests, testCase{
+		name:    ErrChecksumMismatchMsg + "_ERR",
+		blob:    []byte("3MNQE1Y"),
+		wantErr: ErrChecksumMismatch(),
+	})
+
+	// append tests invalid formats error - string with size below 5
+	// mean the version byte or the checksum bytes are missing
+	for size := 0; size < 5; size++ {
+		blob := make([]byte, size)
+		for idx := range blob {
+			blob[idx] = '1'
+		}
+		tests = append(tests, testCase{
+			name:    ErrInvalidFormatMsg + "_ERR",
+			blob:    blob,
+			wantErr: ErrInvalidFormat(),
+		})
+	}
+
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, ver, err := CheckDecode(test.blob)
+			if err != nil && !errors.Is(err, test.wantErr) {
+				t.Errorf("CheckDecode() error: %v | want: %v", err, test.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, test.want) {
+				t.Errorf("CheckDecode() got: %#v | want: %#v", got, test.want)
+			}
+			if ver != test.wantVer {
+				t.Errorf("CheckDecode() ver: %#v | want: %v", ver, test.wantVer)
+			}
+		})
+	}
+}
+
+func Test_CheckEncode(t *testing.T) {
+	t.Parallel()
+
+	type (
+		testCase struct {
+			name string
+			base []byte
+			ver  byte
+			want string
+		}
+		testList []testCase
+	)
+
+	cases := mockTestCaseCheckBase58()
+	tests := make(testList, 0, len(cases))
+	for _, c := range cases {
+		tests = append(tests, testCase{
+			name: c.base + "_OK",
+			base: []byte(c.base),
+			ver:  byte(20),
+			want: c.want,
+		})
+	}
+
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := CheckEncode(test.base, test.ver); got != test.want {
+				t.Errorf("CheckEncode() got: %#v | want: %#v", got, test.want)
+			}
+		})
+	}
+}
+
+func Test_Checksum(t *testing.T) {
+	t.Parallel()
+
+	blob, want := bytes.RandBytes(1024), [ChecksumSize]byte{}
+	h256 := sha256.Sum256(blob)
+	h256 = sha256.Sum256(h256[:])
+	copy(want[:], h256[:ChecksumSize])
+
+	tests := [1]struct {
+		name string
+		blob []byte
+		want [ChecksumSize]byte
 	}{
 		{
-			version: 20,
-			in:      "",
-			out:     "3MNQE1X",
-		},
-		{
-			version: 20,
-			in:      " ",
-			out:     "B2Kr6dBE",
-		},
-		{
-			version: 20,
-			in:      "-",
-			out:     "B3jv1Aft",
-		},
-		{
-			version: 20,
-			in:      "0",
-			out:     "B482yuaX",
-		},
-		{
-			version: 20,
-			in:      "1",
-			out:     "B4CmeGAC",
-		},
-		{
-			version: 20,
-			in:      "-1",
-			out:     "mM7eUf6kB",
-		},
-		{
-			version: 20,
-			in:      "11",
-			out:     "mP7BMTDVH",
-		},
-		{
-			version: 20,
-			in:      "abc",
-			out:     "4QiVtDjUdeq",
-		},
-		{
-			version: 20,
-			in:      "1234598760",
-			out:     "ZmNb8uQn5zvnUohNCEPP",
-		},
-		{
-			version: 20,
-			in:      "abcdefghijklmnopqrstuvwxyz",
-			out:     "K2RYDcKfupxwXdWhSAxQPCeiULntKm63UXyx5MvEH2",
-		},
-		{
-			version: 20,
-			in:      "00000000000000000000000000000000000000000000000000000000000000",
-			out:     "bi1EWXwJay2udZVxLJozuTb8Meg4W9c6xnmJaRDjg6pri5MBAxb9XwrpQXbtnqEoRV5U2pixnFfwyXC8tRAVC8XxnjK",
+			name: "OK",
+			blob: blob,
+			want: want,
 		},
 	}
 
-	for x, test := range tests {
-		// test encoding
-		if res := base58.CheckEncode([]byte(test.in), test.version); res != test.out {
-			t.Errorf("CheckEncode test #%d got: %v | want: %v", x, res, test.out)
-		}
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 
-		// test decoding
-		res, version, err := base58.CheckDecode([]byte(test.out))
-		switch {
-		case err != nil:
-			t.Errorf("CheckDecode() test #%d failed: %v", x, err)
-		case version != test.version:
-			t.Errorf("CheckDecode() test #%d version got: %v | want: %v", x, version, test.version)
-		case string(res) != test.in:
-			t.Errorf("CheckDecode() test #%d got: %v | want: %v", x, res, test.in)
-		}
-	}
-
-	// test the two decoding failure cases
-	// case 1: checksum error
-	_, _, err := base58.CheckDecode([]byte("3MNQE1Y"))
-	if !errors.Is(err, base58.ErrChecksumMismatch()) {
-		t.Error("CheckDecode() test failed, expected ErrChecksumMismatch")
-	}
-
-	// case 2: invalid formats
-	// string lengths below 5 mean the version byte and/or the checksum bytes are missing
-	b := []byte("")
-	for l := 0; l < 4; l++ {
-		_, _, err = base58.CheckDecode(b) // make a string of length `len`
-		if !errors.Is(err, base58.ErrInvalidFormat()) {
-			t.Error("CheckDecode() test failed, expected ErrInvalidFormat")
-		}
+			if got := Checksum(test.blob); !reflect.DeepEqual(got, test.want) {
+				t.Errorf("Checksum() got: %#v | want: %#v", got, test.want)
+			}
+		})
 	}
 }

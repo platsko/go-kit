@@ -7,18 +7,18 @@ import (
 )
 
 const (
-	// alphabet is the modified base58 alphabet.
-	alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+	// Alphabet is the modified base58 alphabet.
+	Alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
 	alphabetIdx0 = '1'
-	alphabetSize = len(alphabet)
+	alphabetSize = len(Alphabet)
 
-	// i255 is a magic number represented symbol that does not exist in alphabet.
+	// i255 is a magic number represented symbol that does not exist in Alphabet.
 	i255 = 255
 )
 
 // Decode decodes base58 encoded bytes.
-func Decode(b []byte) ([]byte, error) {
+func Decode(blob []byte) ([]byte, error) {
 	// nolint: gofmt, goimports
 	decodeTable := [256]byte{
 		255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
@@ -40,41 +40,41 @@ func Decode(b []byte) ([]byte, error) {
 	}
 
 	// nolint: gomnd
-	capacity := utf8.RuneCount(b)*733/1000 + 1 // log(58) / log(256)
+	capacity := utf8.RuneCount(blob)*733/1000 + 1 // log(58) / log(256)
 	output := make([]byte, capacity)
-	outputReverseEnd := capacity - 1
+	outputSize := capacity - 1
+	skipZeros, leadZeros := false, 0
 
-	skipZeros, prefixZeroes := false, 0
-	for _, target := range b {
+	for _, b := range blob {
 		// collect prefix zeros
 		if !skipZeros {
-			if target == alphabetIdx0 {
-				prefixZeroes++
+			if b == alphabetIdx0 {
+				leadZeros++
 				continue // nolint: nlreturn
 			} else {
 				skipZeros = true
 			}
 		}
 
-		carry := int(decodeTable[target])
+		carry := int(decodeTable[b])
 		if carry == i255 {
 			return nil, ErrUnknownFormat()
 		}
 
-		outputIdx := capacity - 1
-		for ; outputIdx > outputReverseEnd || carry != 0; outputIdx-- {
-			carry += alphabetSize * int(output[outputIdx])
-			output[outputIdx] = byte(rune(carry) % 256) // nolint: gomnd
+		idx := capacity - 1
+		for ; idx > outputSize || carry != 0; idx-- {
+			carry += alphabetSize * int(output[idx])
+			output[idx] = byte(rune(carry) % 256) // nolint: gomnd
 			carry /= 256
 		}
 
-		outputReverseEnd = outputIdx
+		outputSize = idx
 	}
 
-	retBytes := make([]byte, prefixZeroes+(capacity-1-outputReverseEnd))
-	copy(retBytes[prefixZeroes:], output[outputReverseEnd+1:])
+	res := make([]byte, leadZeros+(capacity-1-outputSize))
+	copy(res[leadZeros:], output[outputSize+1:])
 
-	return retBytes, nil
+	return res, nil
 }
 
 // DecodeString decodes base58 encoded string to bytes.
@@ -83,38 +83,38 @@ func DecodeString(s string) ([]byte, error) {
 }
 
 // Encode encodes given bytes to base58 encoded bytes.
-func Encode(b []byte) []byte {
-	prefixZeroes, inputLength := 0, len(b)
-	for prefixZeroes < inputLength && b[prefixZeroes] == 0 {
-		prefixZeroes++
+func Encode(blob []byte) []byte {
+	leadZeros, size := 0, len(blob)
+	for leadZeros < size && blob[leadZeros] == 0 {
+		leadZeros++
 	}
 
 	// nolint: gomnd
-	capacity := (inputLength-prefixZeroes)*138/100 + 1 // log256 / log58
-	output := make([]byte, capacity)
-	outputReverseEnd := capacity - 1
+	capacity := (size-leadZeros)*138/100 + 1 // log256 / log58
+	outputSize := capacity - 1
 
-	for _, inputByte := range b[prefixZeroes:] {
-		outputIdx := capacity - 1
-		for carry := int(inputByte); outputIdx > outputReverseEnd || carry != 0; outputIdx-- {
-			carry += int(output[outputIdx]) << 8 // nolint: gomnd
-			output[outputIdx] = byte(carry % alphabetSize)
+	output := make([]byte, capacity)
+	for _, b := range blob[leadZeros:] {
+		idx := capacity - 1
+		for carry := int(b); idx > outputSize || carry != 0; idx-- {
+			carry += int(output[idx]) << 8 // nolint: gomnd
+			output[idx] = byte(carry % alphabetSize)
 			carry /= alphabetSize
 		}
-
-		outputReverseEnd = outputIdx
+		outputSize = idx
 	}
 
-	blob, encodeTable := make([]byte, prefixZeroes+(capacity-1-outputReverseEnd)), []byte(alphabet)
-	for i := 0; i < prefixZeroes; i++ {
-		blob[i] = encodeTable[0]
+	encodeTable := []byte(Alphabet)
+	res := make([]byte, leadZeros+(capacity-1-outputSize))
+	for i := 0; i < leadZeros; i++ {
+		res[i] = alphabetIdx0
 	}
 
-	for i, n := range output[outputReverseEnd+1:] {
-		blob[prefixZeroes+i] = encodeTable[n]
+	for i, n := range output[outputSize+1:] {
+		res[leadZeros+i] = encodeTable[n]
 	}
 
-	return blob
+	return res
 }
 
 // EncodeToString encodes given bytes to base58 encoded string.

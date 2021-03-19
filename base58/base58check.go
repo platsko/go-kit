@@ -7,16 +7,16 @@ import (
 )
 
 const (
-	// checksumSize is a size of checksum in bytes.
-	checksumSize = 4
+	// ChecksumSize is a size of checksum in bytes.
+	ChecksumSize = 4
 
-	// versionSize is a size of version in bytes.
-	versionSize = 1
+	// VersionSize is a size of version in bytes.
+	VersionSize = 1
 )
 
 // CheckEncode prepends a version byte and appends a four byte checksum.
 func CheckEncode(b []byte, ver byte) string {
-	blob := make([]byte, 0, versionSize+len(b)+checksumSize)
+	blob := make([]byte, 0, VersionSize+len(b)+ChecksumSize)
 	blob = append(blob, ver)
 	blob = append(blob, b...)
 
@@ -27,25 +27,25 @@ func CheckEncode(b []byte, ver byte) string {
 }
 
 // CheckDecode decodes a string that was encoded with CheckEncode and verifies the checksum.
-func CheckDecode(b []byte) ([]byte, byte, error) {
-	decoded, err := Decode(b)
+func CheckDecode(blob []byte) ([]byte, byte, error) {
+	decoded, err := Decode(blob)
 	if err != nil {
 		return nil, 0, err
 	}
 
-	if len(decoded) < versionSize+checksumSize {
+	if len(decoded) < VersionSize+ChecksumSize {
 		return nil, 0, ErrInvalidFormat()
 	}
 
-	size := len(decoded) - checksumSize
-	checksum := [checksumSize]byte{}
+	size := len(decoded) - ChecksumSize
+	checksum := [ChecksumSize]byte{}
 	copy(checksum[:], decoded[size:])
 
 	if Checksum(decoded[:size]) != checksum {
 		return nil, 0, ErrChecksumMismatch()
 	}
 
-	payload := decoded[versionSize:size]
+	payload := decoded[VersionSize:size]
 	result := make([]byte, 0, len(payload))
 	result = append(result, payload...)
 
@@ -54,13 +54,13 @@ func CheckDecode(b []byte) ([]byte, byte, error) {
 	return result, version, nil
 }
 
-// Checksum returns first of checksumSize bytes
+// Checksum returns first of ChecksumSize bytes
 // of SHA256 double-hash over provided bytes.
-func Checksum(b []byte) (checksum [checksumSize]byte) {
-	h := sha256.Sum256(b)
-	h = sha256.Sum256(h[:])
+func Checksum(blob []byte) (checksum [ChecksumSize]byte) {
+	h256 := sha256.Sum256(blob)
+	h256 = sha256.Sum256(h256[:])
 
-	copy(checksum[:], h[:checksumSize])
+	copy(checksum[:], h256[:ChecksumSize])
 
 	return checksum
 }
