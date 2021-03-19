@@ -4,199 +4,225 @@ package base58_test
 
 import (
 	"encoding/hex"
+	"reflect"
 	"testing"
 
-	"github.com/platsko/go-kit/base58"
+	. "github.com/platsko/go-kit/base58"
 	"github.com/platsko/go-kit/bytes"
 )
 
-type (
-	test struct {
-		in  string
-		out string
-	}
+const (
+	strBase58 = "TTe8GAjHDwbcnY1MYsBjNkBanp9GgyzPK8PxePH7zayyp"
 )
 
-func BenchmarkDecode(tb *testing.B) {
-	in := "1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L"
+func Benchmark_Decode(tb *testing.B) {
+	base58 := []byte(strBase58)
 	tb.ResetTimer()
 	for i := 0; i < tb.N; i++ {
-		if _, err := base58.DecodeString(in); err != nil {
+		if _, err := Decode(base58); err != nil {
 			tb.Fatal(err)
 		}
 	}
 }
 
-func BenchmarkEncode(tb *testing.B) {
-	in := bytes.RandBytes(160)
+func Benchmark_DecodeString(tb *testing.B) {
+	for i := 0; i < tb.N; i++ {
+		if _, err := DecodeString(strBase58); err != nil {
+			tb.Fatal(err)
+		}
+	}
+}
+
+func Benchmark_Encode(tb *testing.B) {
+	blob := bytes.RandBytes(28)
 	tb.ResetTimer()
 	for i := 0; i < tb.N; i++ {
-		_ = base58.EncodeToString(in)
+		_ = Encode(blob)
 	}
 }
 
-func TestBase58(t *testing.T) {
+func Benchmark_EncodeToString(tb *testing.B) {
+	blob := bytes.RandBytes(28)
+	tb.ResetTimer()
+	for i := 0; i < tb.N; i++ {
+		_ = EncodeToString(blob)
+	}
+}
+
+func Test_Decode(t *testing.T) {
 	t.Parallel()
 
-	for x, test := range makeStringTests() {
-		b := []byte(test.in)
-		if res := base58.EncodeToString(b); res != test.out {
-			t.Errorf("EncodeToString() test #%d failed: got: %v | want: %v", x, res, test.out)
-			continue
+	type (
+		testCase struct {
+			name    string
+			base    []byte
+			want    []byte
+			wantErr bool
 		}
-	}
+		testList []testCase
+	)
 
-	for x, test := range makeHexTests() {
-		b, err := hex.DecodeString(test.in)
+	hexCases := mockTestCaseDecode()
+	errCases := mockTestCaseDecodeErr()
+	tests := make(testList, 0, len(hexCases)+len(errCases))
+
+	for _, c := range hexCases {
+		want, err := hex.DecodeString(c.want)
 		if err != nil {
-			t.Errorf("hex.DecodeString() failed failed #%d: got: %v", x, test.in)
+			t.Errorf("hex.DecodeString() error: %v | want: %v", err, nil)
 			continue
 		}
-		if res, _ := base58.DecodeString(test.out); !bytes.Equal(res, b) {
-			t.Errorf("DecodeString() test #%d failed: got: %v | want: %v", x, res, test.in)
-			continue
-		}
+		tests = append(tests, testCase{
+			name: c.base + "_OK",
+			base: []byte(c.base),
+			want: want,
+		})
 	}
 
-	for x, test := range makeInvalidStringTests() {
-		if _, err := base58.DecodeString(test.in); err == nil {
-			t.Errorf("DecodeString() invalidString test #%d error: %v | want: %v", x, err, base58.ErrUnknownFormat())
-			continue
-		}
+	for _, c := range errCases {
+		tests = append(tests, testCase{
+			name:    c.base + "_ERR",
+			base:    []byte(c.base),
+			wantErr: true,
+		})
+	}
+
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := Decode(test.base)
+			if (err != nil) != test.wantErr {
+				t.Errorf("Decode() error = %v, wantErr %v", err, test.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, test.want) {
+				t.Errorf("Decode() got = %v, want %v", got, test.want)
+			}
+		})
 	}
 }
 
-func makeStringTests() []test {
-	return []test{
-		{
-			in:  "",
-			out: "",
-		},
-		{
-			in:  " ",
-			out: "Z",
-		},
-		{
-			in:  "-",
-			out: "n",
-		},
-		{
-			in:  "0",
-			out: "q",
-		},
-		{
-			in:  "1",
-			out: "r",
-		},
-		{
-			in:  "-1",
-			out: "4SU",
-		},
-		{
-			in:  "11",
-			out: "4k8",
-		},
-		{
-			in:  "abc",
-			out: "ZiCa",
-		},
-		{
-			in:  "1234598760",
-			out: "3mJr7AoUXx2Wqd",
-		},
-		{
-			in:  "abcdefghijklmnopqrstuvwxyz",
-			out: "3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f",
-		},
-		{
-			in:  "00000000000000000000000000000000000000000000000000000000000000",
-			out: "3sN2THZeE9Eh9eYrwkvZqNstbHGvrxSAM7gXUXvyFQP8XvQLUqNCS27icwUeDT7ckHm4FUHM2mTVh1vbLmk7y",
-		},
+func Test_DecodeString(t *testing.T) {
+	t.Parallel()
+
+	type (
+		testCase struct {
+			name    string
+			base    string
+			want    []byte
+			wantErr bool
+		}
+		testList []testCase
+	)
+
+	hexCases := mockTestCaseDecode()
+	errCases := mockTestCaseDecodeErr()
+	tests := make(testList, 0, len(hexCases)+len(errCases))
+
+	for _, c := range hexCases {
+		want, err := hex.DecodeString(c.want)
+		if err != nil {
+			t.Errorf("hex.DecodeString() error: %v | want: %v", err, nil)
+			continue
+		}
+		tests = append(tests, testCase{
+			name: c.base + "_OK",
+			base: c.base,
+			want: want,
+		})
+	}
+
+	for _, c := range errCases {
+		tests = append(tests, testCase{
+			name:    c.base + "_ERR",
+			base:    c.base,
+			wantErr: true,
+		})
+	}
+
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := DecodeString(test.base)
+			if (err != nil) != test.wantErr {
+				t.Errorf("DecodeString() error: %v | want: %v", err, test.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, test.want) {
+				t.Errorf("DecodeString() got: %#v | want: %#v", got, test.want)
+			}
+		})
 	}
 }
 
-func makeInvalidStringTests() []test {
-	return []test{
-		{
-			in: "0",
-		},
-		{
-			in: "O",
-		},
-		{
+func Test_Encode(t *testing.T) {
+	t.Parallel()
 
-			in: "I",
-		},
-		{
-			in: "l",
-		},
-		{
-			in: "3mJr0",
-		},
-		{
+	type (
+		testCase struct {
+			name string
+			blob []byte
+			want []byte
+		}
+		testList []testCase
+	)
 
-			in: "O3yxU",
-		},
-		{
-			in: "3sNI",
-		},
-		{
-			in: "4kl8",
-		},
-		{
-			in: "0OIl",
-		},
-		{
-			in: "!@#$%^&*()-_=+~`",
-		},
+	cases := mockTestCaseEncode()
+	tests := make(testList, 0, len(cases))
+	for _, c := range cases {
+		tests = append(tests, testCase{
+			name: c.base + "_OK",
+			blob: []byte(c.base),
+			want: []byte(c.want),
+		})
+	}
+
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := Encode(test.blob); !reflect.DeepEqual(got, test.want) {
+				t.Errorf("Encode() got: %#v | want: %#v", got, test.want)
+			}
+		})
 	}
 }
 
-func makeHexTests() []test {
-	return []test{
-		{
-			in:  "61",
-			out: "2g",
-		},
-		{
-			in:  "626262",
-			out: "a3gV",
-		},
-		{
-			in:  "636363",
-			out: "aPEr",
-		},
-		{
-			in:  "73696d706c792061206c6f6e6720737472696e67",
-			out: "2cFupjhnEsSn59qHXstmK2ffpLv2",
-		},
-		{
-			in:  "00eb15231dfceb60925886b67d065299925915aeb172c06647",
-			out: "1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L",
-		},
-		{
-			in:  "516b6fcd0f",
-			out: "ABnLTmg",
-		},
-		{
-			in:  "bf4f89001e670274dd",
-			out: "3SEo3LWLoPntC",
-		},
-		{
-			in:  "572e4794",
-			out: "3EFU7m",
-		},
-		{
-			in:  "ecac89cad93923c02321",
-			out: "EJDM8drfXA6uyA",
-		},
-		{
-			in:  "10c8511e",
-			out: "Rt5zm",
-		},
-		{
-			in:  "00000000000000000000",
-			out: "1111111111",
-		},
+func Test_EncodeToString(t *testing.T) {
+	t.Parallel()
+
+	type (
+		testCase struct {
+			name string
+			blob []byte
+			want string
+		}
+		testList []testCase
+	)
+
+	cases := mockTestCaseEncode()
+	tests := make(testList, 0, len(cases))
+	for _, c := range cases {
+		tests = append(tests, testCase{
+			name: c.base + "_OK",
+			blob: []byte(c.base),
+			want: c.want,
+		})
+	}
+
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := EncodeToString(test.blob); got != test.want {
+				t.Errorf("EncodeToString() pass: %#v got: %v | want: %v", test.blob, got, test.want)
+			}
+		})
 	}
 }
