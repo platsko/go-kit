@@ -367,7 +367,7 @@ func Test_Timestamp_Marshal(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, test.want) {
-				t.Errorf("Marshal() got: %v | want: %v", got, test.want)
+				t.Errorf("Marshal() got: %#v | want: %#v", got, test.want)
 			}
 		})
 	}
@@ -414,7 +414,7 @@ func Test_Timestamp_MarshalJSON(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, test.want) {
-				t.Errorf("MarshalJSON() got: %v | want: %v", got, test.want)
+				t.Errorf("MarshalJSON() got: %#v | want: %#v", got, test.want)
 			}
 		})
 	}
@@ -579,7 +579,7 @@ func Test_Timestamp_Unmarshal(t *testing.T) {
 		},
 		{
 			name:    "invalid_BLOB_ERR",
-			blob:    []byte(`}{`), // invalid data
+			blob:    []byte(":"), // invalid data
 			wantErr: true,
 		},
 	}
@@ -620,7 +620,7 @@ func Test_Timestamp_UnmarshalJSON(t *testing.T) {
 		},
 		{
 			name:    "invalid_JSON_ERR",
-			blob:    []byte(`}{`), // invalid json data
+			blob:    []byte(":"), // invalid json
 			wantErr: true,
 		},
 	}

@@ -16,7 +16,7 @@ func Benchmark_RandBytes(tb *testing.B) {
 	}
 }
 
-func TestRandBytes(t *testing.T) {
+func Test_RandBytes(t *testing.T) {
 	t.Parallel()
 
 	tests := [1]struct {
