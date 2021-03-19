@@ -48,6 +48,12 @@ func Benchmark_Hash224_Base58(tb *testing.B) {
 	}
 }
 
+func Benchmark_Hash224_Empty(tb *testing.B) {
+	for i := 0; i < tb.N; i++ {
+		_ = Hash224{}.Empty()
+	}
+}
+
 func Benchmark_Hash224_Encode(tb *testing.B) {
 	for i := 0; i < tb.N; i++ {
 		_ = h224.Encode()
@@ -197,6 +203,38 @@ func Test_Hash224_Encode(t *testing.T) {
 			t.Parallel()
 
 			if got := test.h224.Encode(); got != test.want {
+				t.Errorf("Encode() got: %v | want: %v", got, test.want)
+			}
+		})
+	}
+}
+
+func Test_Hash224_Empty(t *testing.T) {
+	t.Parallel()
+
+	tests := [2]struct {
+		name string
+		h224 Hash224
+		want bool
+	}{
+		{
+			name: "TRUE",
+			h224: Hash224{},
+			want: true,
+		},
+		{
+			name: "FALSE",
+			h224: h224,
+			want: false,
+		},
+	}
+
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := test.h224.Empty(); got != test.want {
 				t.Errorf("Encode() got: %v | want: %v", got, test.want)
 			}
 		})

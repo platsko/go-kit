@@ -48,6 +48,12 @@ func Benchmark_Hash256_Base58(tb *testing.B) {
 	}
 }
 
+func Benchmark_Hash256_Empty(tb *testing.B) {
+	for i := 0; i < tb.N; i++ {
+		_ = Hash256{}.Empty()
+	}
+}
+
 func Benchmark_Hash256_Encode(tb *testing.B) {
 	for i := 0; i < tb.N; i++ {
 		_ = h256.Encode()
@@ -172,6 +178,38 @@ func Test_Hash256_Base58(t *testing.T) {
 
 			if got := test.h256.Base58(); got != test.want {
 				t.Errorf("Base58() got: %v | want: %v", got, test.want)
+			}
+		})
+	}
+}
+
+func Test_Hash256_Empty(t *testing.T) {
+	t.Parallel()
+
+	tests := [2]struct {
+		name string
+		h256 Hash256
+		want bool
+	}{
+		{
+			name: "TRUE",
+			h256: Hash256{},
+			want: true,
+		},
+		{
+			name: "FALSE",
+			h256: h256,
+			want: false,
+		},
+	}
+
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := test.h256.Empty(); got != test.want {
+				t.Errorf("Encode() got: %v | want: %v", got, test.want)
 			}
 		})
 	}
