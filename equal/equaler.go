@@ -58,7 +58,7 @@ func (e *equaler) Raw() ([]byte, error) {
 	}
 
 	if len(e.blob) == 0 { // enforce this error for unit testing
-		return nil, ErrZeroSizeValue()
+		return nil, errors.ErrZeroSizeValue()
 	}
 
 	blob := make([]byte, len(e.blob))
