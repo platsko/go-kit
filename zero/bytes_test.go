@@ -5,24 +5,55 @@ package zero_test
 import (
 	"testing"
 
+	"github.com/platsko/go-kit/bytes"
 	. "github.com/platsko/go-kit/zero"
 )
 
-func TestBytea32(t *testing.T) {
+func Benchmark_Bytea28(b *testing.B) {
+	b224 := [28]byte{}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		Bytea28(&b224)
+	}
+}
+
+func Benchmark_Bytea32(b *testing.B) {
+	b256 := [32]byte{}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		Bytea32(&b256)
+	}
+}
+
+func Benchmark_Bytea64(b *testing.B) {
+	b512 := [64]byte{}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		Bytea64(&b512)
+	}
+}
+
+func Benchmark_Bytes(b *testing.B) {
+	blob := bytes.RandBytes(1024)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		Bytes(blob)
+	}
+}
+
+func Test_Bytea28(t *testing.T) {
 	t.Parallel()
 
-	data := [32]byte{}
-	for i := 0; i < len(data); i++ {
-		data[i] = byte(i)
-	}
+	b224, b := [28]byte{}, bytes.RandBytes(28)
+	copy(b224[:], b)
 
 	tests := [1]struct {
 		name string
-		data [32]byte
+		b224 [28]byte
 	}{
 		{
 			name: "OK",
-			data: data,
+			b224: b224,
 		},
 	}
 
@@ -31,10 +62,10 @@ func TestBytea32(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			Bytea32(&test.data)
-			for i := range test.data {
-				if test.data[i] != 0 {
-					t.Errorf("Bytea32() got: %v | want: [32]byte zeros filled", test.data)
+			Bytea28(&test.b224)
+			for i := range test.b224 {
+				if test.b224[i] != 0 {
+					t.Errorf("Bytea28() got: %v | want: [28]byte zeros filled", test.b224)
 					return
 				}
 			}
@@ -42,21 +73,19 @@ func TestBytea32(t *testing.T) {
 	}
 }
 
-func TestBytea64(t *testing.T) {
+func Test_Bytea32(t *testing.T) {
 	t.Parallel()
 
-	data := [64]byte{}
-	for i := 0; i < len(data); i++ {
-		data[i] = byte(i)
-	}
+	b256, b := [32]byte{}, bytes.RandBytes(32)
+	copy(b256[:], b)
 
 	tests := [1]struct {
 		name string
-		data [64]byte
+		b256 [32]byte
 	}{
 		{
 			name: "OK",
-			data: data,
+			b256: b256,
 		},
 	}
 
@@ -65,10 +94,10 @@ func TestBytea64(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			Bytea64(&test.data)
-			for i := range test.data {
-				if test.data[i] != 0 {
-					t.Errorf("Bytea64() got: %v | want: [64]byte zeros filled", test.data)
+			Bytea32(&test.b256)
+			for i := range test.b256 {
+				if test.b256[i] != 0 {
+					t.Errorf("Bytea32() got: %v | want: [32]byte zeros filled", test.b256)
 					return
 				}
 			}
@@ -76,21 +105,19 @@ func TestBytea64(t *testing.T) {
 	}
 }
 
-func TestBytes(t *testing.T) {
+func Test_Bytea64(t *testing.T) {
 	t.Parallel()
 
-	data := make([]byte, 512)
-	for i := 0; i < len(data); i++ {
-		data[i] = byte(i)
-	}
+	b512, b := [64]byte{}, bytes.RandBytes(64)
+	copy(b512[:], b)
 
 	tests := [1]struct {
 		name string
-		data []byte
+		b512 [64]byte
 	}{
 		{
 			name: "OK",
-			data: data,
+			b512: b512,
 		},
 	}
 
@@ -99,10 +126,40 @@ func TestBytes(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			Bytes(test.data)
-			for i := range test.data {
-				if test.data[i] != 0 {
-					t.Errorf("Bytes() got: %v | want: []byte zeros filled", test.data)
+			Bytea64(&test.b512)
+			for i := range test.b512 {
+				if test.b512[i] != 0 {
+					t.Errorf("Bytea64() got: %v | want: [64]byte zeros filled", test.b512)
+					return
+				}
+			}
+		})
+	}
+}
+
+func Test_Bytes(t *testing.T) {
+	t.Parallel()
+
+	blob := bytes.RandBytes(1024)
+	tests := [1]struct {
+		name string
+		blob []byte
+	}{
+		{
+			name: "OK",
+			blob: blob,
+		},
+	}
+
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			Bytes(test.blob)
+			for i := range test.blob {
+				if test.blob[i] != 0 {
+					t.Errorf("Bytes() got: %v | want: []byte zeros filled", test.blob)
 					return
 				}
 			}

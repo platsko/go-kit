@@ -11,36 +11,36 @@ import (
 	. "github.com/platsko/go-kit/crypto"
 )
 
-func Benchmark_NewPrivateKey(tb *testing.B) {
+func Benchmark_NewPrivateKey(b *testing.B) {
 	ki, _ := mockCryptoKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = NewPrivateKey(ki)
 	}
 }
 
-func Benchmark_privateKey_Algo(tb *testing.B) {
+func Benchmark_privateKey_Algo(b *testing.B) {
 	prKey, _ := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = prKey.Algo()
 	}
 }
 
-func Benchmark_privateKey_PublicKey(tb *testing.B) {
+func Benchmark_privateKey_PublicKey(b *testing.B) {
 	prKey, _ := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = prKey.PublicKey()
 	}
 }
 
-func Benchmark_privateKey_Sign(tb *testing.B) {
+func Benchmark_privateKey_Sign(b *testing.B) {
 	signable, prKey := mockSignable(Ed25519, 1024)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := prKey.Sign(signable); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
@@ -80,7 +80,7 @@ func Test_NewPrivateKey(t *testing.T) {
 			t.Parallel()
 
 			if got := NewPrivateKey(test.ki); !reflect.DeepEqual(got, test.want) {
-				t.Errorf("NewPrivateKey() = %v, want %v", got, test.want)
+				t.Errorf("NewPrivateKey() got: %v | want: %v", got, test.want)
 			}
 		})
 	}
@@ -121,7 +121,7 @@ func Test_privateKey_Algo(t *testing.T) {
 			t.Parallel()
 
 			if got := test.prKey.Algo(); got != test.want {
-				t.Errorf("Algo() = %v, want %v", got, test.want)
+				t.Errorf("Algo() got: %v | want: %v", got, test.want)
 			}
 		})
 	}

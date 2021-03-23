@@ -12,16 +12,16 @@ var (
 	defaultDelimiter = GetDelimiter()
 )
 
-func Benchmark_GetDelimiter(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_GetDelimiter(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = GetDelimiter()
 	}
 }
 
-func Benchmark_SetDelimiter(tb *testing.B) {
+func Benchmark_SetDelimiter(b *testing.B) {
 	delim := GetDelimiter()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		SetDelimiter(delim)
 	}
 }

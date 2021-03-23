@@ -9,10 +9,10 @@ import (
 	. "github.com/platsko/go-kit/strings"
 )
 
-func Benchmark_RandString(tb *testing.B) {
+func Benchmark_RandString(b *testing.B) {
 	const size = 1024
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = RandString(size)
 	}
 }

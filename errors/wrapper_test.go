@@ -10,25 +10,25 @@ import (
 	. "github.com/platsko/go-kit/errors"
 )
 
-func Benchmark_wrapper_Error(tb *testing.B) {
+func Benchmark_wrapper_Error(b *testing.B) {
 	err := WrapErr(wrapErrorMsg, New(testErrorMsg))
 	if err == nil {
 		log.Fatal("want error interface but got nil value")
 	}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = err.Error()
 	}
 }
 
-func Benchmark_wrapper_Unwrap(tb *testing.B) {
+func Benchmark_wrapper_Unwrap(b *testing.B) {
 	wrapErr := WrapErr(wrapErrorMsg, New(testErrorMsg))
 	err, ok := wrapErr.(Wrapper) // nolint: errorlint
 	if !ok {
 		log.Fatal("got not wrapper interface")
 	}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = err.Unwrap()
 	}
 }

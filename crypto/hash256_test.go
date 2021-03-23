@@ -22,49 +22,55 @@ var (
 	)
 )
 
-func Benchmark_NewHash256(tb *testing.B) {
+func Benchmark_NewHash256(b *testing.B) {
 	b1 := bytes.RandBytes(128)
 	b2 := bytes.RandBytes(256)
 	b3 := bytes.RandBytes(512)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = NewHash256(b1, b2, b3)
 	}
 }
 
-func Benchmark_StrToHash256(tb *testing.B) {
+func Benchmark_StrToHash256(b *testing.B) {
 	s1 := strings.RandString(16)
 	s2 := strings.RandString(32)
 	s3 := strings.RandString(64)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = StrToHash256(s1, s2, s3)
 	}
 }
 
-func Benchmark_Hash256_Base58(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_Hash256_Base58(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = h256.Base58()
 	}
 }
 
-func Benchmark_Hash256_Encode(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_Hash256_Empty(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = Hash256{}.Empty()
+	}
+}
+
+func Benchmark_Hash256_Encode(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = h256.Encode()
 	}
 }
 
-func Benchmark_Hash256_Hamming(tb *testing.B) {
+func Benchmark_Hash256_Hamming(b *testing.B) {
 	v256 := [Hash256Size]byte{}
 	copy(v256[:], bytes.RandBytes(256))
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = h256.Hamming(v256)
 	}
 }
 
-func Benchmark_Hash256_String(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_Hash256_String(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = h256.String()
 	}
 }
@@ -172,6 +178,38 @@ func Test_Hash256_Base58(t *testing.T) {
 
 			if got := test.h256.Base58(); got != test.want {
 				t.Errorf("Base58() got: %v | want: %v", got, test.want)
+			}
+		})
+	}
+}
+
+func Test_Hash256_Empty(t *testing.T) {
+	t.Parallel()
+
+	tests := [2]struct {
+		name string
+		h256 Hash256
+		want bool
+	}{
+		{
+			name: "TRUE",
+			h256: Hash256{},
+			want: true,
+		},
+		{
+			name: "FALSE",
+			h256: h256,
+			want: false,
+		},
+	}
+
+	for idx := range tests {
+		test := tests[idx]
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if got := test.h256.Empty(); got != test.want {
+				t.Errorf("Encode() got: %v | want: %v", got, test.want)
 			}
 		})
 	}

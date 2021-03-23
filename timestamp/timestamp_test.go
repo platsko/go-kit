@@ -18,118 +18,118 @@ const (
 	testTimestampLayout = "1970-12-31T23:23:59.123456789Z+0000UTC"
 )
 
-func Benchmark_Now(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_Now(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = Now()
 	}
 }
 
-func Benchmark_DecodeTimestamp(tb *testing.B) {
+func Benchmark_DecodeTimestamp(b *testing.B) {
 	ts := Now()
 	pbuf, _ := ts.Encode()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := DecodeTimestamp(pbuf); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_Timestamp_Decode(tb *testing.B) {
+func Benchmark_Timestamp_Decode(b *testing.B) {
 	ts := Now()
 	pbuf, _ := ts.Encode()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		ts := Timestamp{}
 		if err := ts.Decode(pbuf); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_Timestamp_Encode(tb *testing.B) {
+func Benchmark_Timestamp_Encode(b *testing.B) {
 	ts := Now()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := ts.Encode(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_Timestamp_Marshal(tb *testing.B) {
+func Benchmark_Timestamp_Marshal(b *testing.B) {
 	ts := Now()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := ts.Marshal(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_Timestamp_MarshalJSON(tb *testing.B) {
+func Benchmark_Timestamp_MarshalJSON(b *testing.B) {
 	ts := Now()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := ts.MarshalJSON(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_Timestamp_Parse(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_Timestamp_Parse(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		ts := Timestamp{}
 		if err := ts.Parse(testTimestampLayout); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_Timestamp_Pretty(tb *testing.B) {
+func Benchmark_Timestamp_Pretty(b *testing.B) {
 	ts := Now()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = ts.Pretty()
 	}
 }
 
-func Benchmark_Timestamp_String(tb *testing.B) {
+func Benchmark_Timestamp_String(b *testing.B) {
 	ts := Now()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = ts.String()
 	}
 }
 
-func Benchmark_Timestamp_UnixNanoStr(tb *testing.B) {
+func Benchmark_Timestamp_UnixNanoStr(b *testing.B) {
 	ts := Now()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = ts.UnixNanoStr()
 	}
 }
 
-func Benchmark_Timestamp_Unmarshal(tb *testing.B) {
+func Benchmark_Timestamp_Unmarshal(b *testing.B) {
 	ts := Now()
 	blob, _ := ts.Marshal()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		ts := Timestamp{}
 		if err := ts.Unmarshal(blob); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_Timestamp_UnmarshalJSON(tb *testing.B) {
+func Benchmark_Timestamp_UnmarshalJSON(b *testing.B) {
 	ts := Now()
 	blob, _ := ts.MarshalJSON()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		ts := Timestamp{}
 		if err := ts.UnmarshalJSON(blob); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
@@ -367,7 +367,7 @@ func Test_Timestamp_Marshal(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, test.want) {
-				t.Errorf("Marshal() got: %v | want: %v", got, test.want)
+				t.Errorf("Marshal() got: %#v | want: %#v", got, test.want)
 			}
 		})
 	}
@@ -414,7 +414,7 @@ func Test_Timestamp_MarshalJSON(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, test.want) {
-				t.Errorf("MarshalJSON() got: %v | want: %v", got, test.want)
+				t.Errorf("MarshalJSON() got: %#v | want: %#v", got, test.want)
 			}
 		})
 	}
@@ -579,7 +579,7 @@ func Test_Timestamp_Unmarshal(t *testing.T) {
 		},
 		{
 			name:    "invalid_BLOB_ERR",
-			blob:    []byte(`}{`), // invalid data
+			blob:    []byte(":"), // invalid data
 			wantErr: true,
 		},
 	}
@@ -620,7 +620,7 @@ func Test_Timestamp_UnmarshalJSON(t *testing.T) {
 		},
 		{
 			name:    "invalid_JSON_ERR",
-			blob:    []byte(`}{`), // invalid json data
+			blob:    []byte(":"), // invalid json
 			wantErr: true,
 		},
 	}

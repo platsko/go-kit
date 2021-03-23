@@ -11,31 +11,31 @@ import (
 	. "github.com/platsko/go-kit/equal"
 )
 
-func Benchmark_BasicEqual(tb *testing.B) {
+func Benchmark_BasicEqual(b *testing.B) {
 	const size = 1024
 	blob := bytes.RandBytes(size)
 	equaler := NewEqualer(blob)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = BasicEqual(equaler, equaler)
 	}
 }
 
-func Benchmark_NewEqualer(tb *testing.B) {
+func Benchmark_NewEqualer(b *testing.B) {
 	const size = 1024
 	blob := bytes.RandBytes(size)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = NewEqualer(blob)
 	}
 }
 
-func Benchmark_equaler_Raw(tb *testing.B) {
+func Benchmark_equaler_Raw(b *testing.B) {
 	const size = 1024
 	blob := bytes.RandBytes(size)
 	equaler := NewEqualer(blob)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := equaler.Raw(); err != nil {
 			log.Fatal(err)
 		}

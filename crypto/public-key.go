@@ -138,8 +138,8 @@ func (c *publicKey) Encode() (*pb.PublicKey, error) {
 }
 
 // Equals implements PublicKey.Equals method of interface.
-func (c *publicKey) Equals(pbkey PublicKey) bool {
-	return equal.BasicEqual(c, pbkey)
+func (c *publicKey) Equals(pbKey PublicKey) bool {
+	return equal.BasicEqual(c, pbKey)
 }
 
 // Hash224 implements PublicKey.Hash224 method of interface.

@@ -14,108 +14,108 @@ import (
 	"github.com/platsko/go-kit/crypto/proto/pb"
 )
 
-func Benchmark_NewSignature(tb *testing.B) {
+func Benchmark_NewSignature(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
 	blob, err := sign.Raw()
 	if err != nil {
-		tb.Fatal(err)
+		b.Fatal(err)
 	}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = NewSignature(blob)
 	}
 }
 
-func Benchmark_DecodeSignature(tb *testing.B) {
+func Benchmark_DecodeSignature(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
 	pbuf := sign.Encode()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = DecodeSignature(pbuf)
 	}
 }
 
-func Benchmark_signature_Decode(tb *testing.B) {
+func Benchmark_signature_Decode(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
 	pbuf := sign.Encode()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		NewSignature(nil).Decode(pbuf)
 	}
 }
 
-func Benchmark_signature_Encode(tb *testing.B) {
+func Benchmark_signature_Encode(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = sign.Encode()
 	}
 }
 
-func Benchmark_signature_Equals(tb *testing.B) {
+func Benchmark_signature_Equals(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = sign.Equals(sign)
 	}
 }
 
-func Benchmark_signature_Marshal(tb *testing.B) {
+func Benchmark_signature_Marshal(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := sign.Marshal(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_signature_MarshalJSON(tb *testing.B) {
+func Benchmark_signature_MarshalJSON(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := sign.MarshalJSON(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_signature_Raw(tb *testing.B) {
+func Benchmark_signature_Raw(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := sign.Raw(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_signature_String(tb *testing.B) {
+func Benchmark_signature_String(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = sign.String()
 	}
 }
 
-func Benchmark_signature_Unmarshal(tb *testing.B) {
+func Benchmark_signature_Unmarshal(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
 	blob, _ := sign.Marshal()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if err := NewSignature(nil).Unmarshal(blob); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_signature_UnmarshalJSON(tb *testing.B) {
+func Benchmark_signature_UnmarshalJSON(b *testing.B) {
 	sign, _ := mockSignature(Ed25519)
 	blob, _ := sign.MarshalJSON()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if err := NewSignature(nil).UnmarshalJSON(blob); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }

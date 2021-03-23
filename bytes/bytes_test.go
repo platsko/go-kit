@@ -8,12 +8,12 @@ import (
 	. "github.com/platsko/go-kit/bytes"
 )
 
-func Benchmark_Equal(tb *testing.B) {
+func Benchmark_Equal(b *testing.B) {
 	const size = 1024
 	vx, vy := make([]byte, size), RandBytes(size)
 	copy(vx, vy)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		Equal(vx, vy)
 	}
 }

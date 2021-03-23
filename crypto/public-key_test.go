@@ -17,163 +17,163 @@ import (
 	"github.com/platsko/go-kit/crypto/proto/pb"
 )
 
-func Benchmark_NewPublicKey(tb *testing.B) {
+func Benchmark_NewPublicKey(b *testing.B) {
 	_, ki := mockCryptoKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = NewPublicKey(ki)
 	}
 }
 
-func Benchmark_DecodePublicKey(tb *testing.B) {
+func Benchmark_DecodePublicKey(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
 	pbuf, err := pbKey.Encode()
 	if err != nil {
-		tb.Fatal(err)
+		b.Fatal(err)
 	}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_, _ = DecodePublicKey(pbuf)
 	}
 }
 
-func Benchmark_publicKey_Algo(tb *testing.B) {
+func Benchmark_publicKey_Algo(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = pbKey.Algo()
 	}
 }
 
-func Benchmark_publicKey_Base64(tb *testing.B) {
+func Benchmark_publicKey_Base64(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.Base64(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_publicKey_Decode(tb *testing.B) {
+func Benchmark_publicKey_Decode(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
 	pbuf, err := pbKey.Encode()
 	if err != nil {
-		tb.Fatal(err)
+		b.Fatal(err)
 	}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		pbKey = NewPublicKey(nil)
 		if err := pbKey.Decode(pbuf); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_publicKey_Encode(tb *testing.B) {
+func Benchmark_publicKey_Encode(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.Encode(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_publicKey_Equals(tb *testing.B) {
+func Benchmark_publicKey_Equals(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = pbKey.Equals(pbKey)
 	}
 }
 
-func Benchmark_publicKey_Hash224(tb *testing.B) {
+func Benchmark_publicKey_Hash224(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.Hash224(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_publicKey_Marshal(tb *testing.B) {
+func Benchmark_publicKey_Marshal(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.Marshal(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_publicKey_MarshalJSON(tb *testing.B) {
+func Benchmark_publicKey_MarshalJSON(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.MarshalJSON(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_publicKey_Raw(tb *testing.B) {
+func Benchmark_publicKey_Raw(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.Raw(); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_publicKey_String(tb *testing.B) {
+func Benchmark_publicKey_String(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = pbKey.String()
 	}
 }
 
-func Benchmark_publicKey_Unmarshal(tb *testing.B) {
+func Benchmark_publicKey_Unmarshal(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
 	blob, err := pbKey.Marshal()
 	if err != nil {
-		tb.Fatal(err)
+		b.Fatal(err)
 	}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if err := pbKey.Unmarshal(blob); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_publicKey_UnmarshalJSON(tb *testing.B) {
+func Benchmark_publicKey_UnmarshalJSON(b *testing.B) {
 	_, pbKey := mockGenerateKeyPair(Ed25519)
 	blob, err := pbKey.MarshalJSON()
 	if err != nil {
-		tb.Fatal(err)
+		b.Fatal(err)
 	}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if err := pbKey.UnmarshalJSON(blob); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_publicKey_Verify(tb *testing.B) {
+func Benchmark_publicKey_Verify(b *testing.B) {
 	signable, prKey := mockSignable(Ed25519, 1024)
 	pbKey := prKey.PublicKey()
 	if _, err := prKey.Sign(signable); err != nil {
-		tb.Fatal(err)
+		b.Fatal(err)
 	}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if ok, _ := pbKey.Verify(signable); !ok {
-			tb.Fatalf("Verify() got: %v | want: true", ok)
+			b.Fatalf("Verify() got: %v | want: true", ok)
 		}
 	}
 }
@@ -213,7 +213,7 @@ func Test_NewPublicKey(t *testing.T) {
 			t.Parallel()
 
 			if got := NewPublicKey(test.ki); !reflect.DeepEqual(got, test.want) {
-				t.Errorf("NewPrivateKey() = %v, want %v", got, test.want)
+				t.Errorf("NewPrivateKey() got: %v | want: %v", got, test.want)
 			}
 		})
 	}
@@ -302,7 +302,7 @@ func Test_publicKey_Algo(t *testing.T) {
 			t.Parallel()
 
 			if got := test.pbKey.Algo(); got != test.want {
-				t.Errorf("Algo() = %v, want %v", got, test.want)
+				t.Errorf("Algo() got: %v | want: %v", got, test.want)
 			}
 		})
 	}
@@ -719,7 +719,7 @@ func Test_publicKey_String(t *testing.T) {
 	}
 
 	tests = append(tests, testCase{
-		name:  "ERR",
+		name:  "nil_OK",
 		pbKey: NewPublicKey(nil),
 		want:  "<nil>",
 	})

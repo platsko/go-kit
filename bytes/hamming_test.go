@@ -8,13 +8,13 @@ import (
 	. "github.com/platsko/go-kit/bytes"
 )
 
-func Benchmark_Hamming(tb *testing.B) {
+func Benchmark_Hamming(b *testing.B) {
 	vx := RandBytes(256)
 	vy := RandBytes(256)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := Hamming(vx, vy); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }

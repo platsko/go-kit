@@ -20,56 +20,56 @@ var (
 	wrapFmtLibFormat = "%s" + defaultDelimiter + "%w"
 )
 
-func Benchmark_As(tb *testing.B) {
+func Benchmark_As(b *testing.B) {
 	testErr := New(testErrorMsg)
 	wrapErr := WrapErr(wrapErrorMsg, testErr)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = As(wrapErr, &testErr)
 	}
 }
 
-func Benchmark_Is(tb *testing.B) {
+func Benchmark_Is(b *testing.B) {
 	testErr := New(testErrorMsg)
 	wrapErr := WrapErr(wrapErrorMsg, testErr)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = Is(wrapErr, testErr)
 	}
 }
 
-func Benchmark_New(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_New(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = New(testErrorMsg)
 	}
 }
 
-func Benchmark_Unwrap(tb *testing.B) {
+func Benchmark_Unwrap(b *testing.B) {
 	wrapErr := WrapErr(wrapErrorMsg, New(testErrorMsg))
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = Unwrap(wrapErr)
 	}
 }
 
-func Benchmark_WrapErr(tb *testing.B) {
+func Benchmark_WrapErr(b *testing.B) {
 	wrapErr := New(wrapErrorMsg)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = WrapErr(testErrorMsg, wrapErr)
 	}
 }
 
-func Benchmark_WrapStr(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_WrapStr(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = WrapStr(testErrorMsg, wrapErrorMsg)
 	}
 }
 
-func Benchmark_FmtErrorf_Wrap(tb *testing.B) {
+func Benchmark_FmtErrorf_Wrap(b *testing.B) {
 	wrapErr := New(wrapErrorMsg)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = fmt.Errorf(wrapFmtLibFormat, testErrorMsg, wrapErr)
 	}
 }

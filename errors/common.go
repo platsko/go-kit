@@ -4,12 +4,18 @@ package errors
 
 const (
 	ErrNilPointerValueMsg = "nil pointer value"
+	ErrZeroSizeValueMsg   = "zero size value"
 )
 
 var (
 	errNilPointerValue = New(ErrNilPointerValueMsg)
+	errZeroSizeValue   = New(ErrZeroSizeValueMsg)
 )
 
 func ErrNilPointerValue() error {
 	return errNilPointerValue
+}
+
+func ErrZeroSizeValue() error {
+	return errZeroSizeValue
 }

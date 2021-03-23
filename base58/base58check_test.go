@@ -12,31 +12,31 @@ import (
 	"github.com/platsko/go-kit/errors"
 )
 
-func Benchmark_CheckDecode(tb *testing.B) {
+func Benchmark_CheckDecode(b *testing.B) {
 	base58 := []byte(strBase58)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, _, err := CheckDecode(base58); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_CheckEncode(tb *testing.B) {
+func Benchmark_CheckEncode(b *testing.B) {
 	blob, ver, err := CheckDecode([]byte(strBase58))
 	if err != nil {
-		tb.Fatal(err)
+		b.Fatal(err)
 	}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = CheckEncode(blob, ver)
 	}
 }
 
-func Benchmark_Checksum(tb *testing.B) {
+func Benchmark_Checksum(b *testing.B) {
 	base58 := []byte(strBase58)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = Checksum(base58)
 	}
 }
@@ -100,7 +100,7 @@ func Test_CheckDecode(t *testing.T) {
 			t.Parallel()
 
 			got, ver, err := CheckDecode(test.blob)
-			if err != nil && !errors.Is(err, test.wantErr) {
+			if !errors.Is(err, test.wantErr) {
 				t.Errorf("CheckDecode() error: %v | want: %v", err, test.wantErr)
 				return
 			}

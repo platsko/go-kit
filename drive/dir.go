@@ -1,6 +1,6 @@
 // Copyright © 2020-2021 The EVEN Solutions Developers Team
 
-package disk
+package drive
 
 import (
 	"os"

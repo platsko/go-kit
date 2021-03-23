@@ -15,36 +15,36 @@ const (
 	strBase58 = "TTe8GAjHDwbcnY1MYsBjNkBanp9GgyzPK8PxePH7zayyp"
 )
 
-func Benchmark_Decode(tb *testing.B) {
+func Benchmark_Decode(b *testing.B) {
 	base58 := []byte(strBase58)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		if _, err := Decode(base58); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_DecodeString(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_DecodeString(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		if _, err := DecodeString(strBase58); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_Encode(tb *testing.B) {
+func Benchmark_Encode(b *testing.B) {
 	blob := bytes.RandBytes(28)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = Encode(blob)
 	}
 }
 
-func Benchmark_EncodeToString(tb *testing.B) {
+func Benchmark_EncodeToString(b *testing.B) {
 	blob := bytes.RandBytes(28)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = EncodeToString(blob)
 	}
 }
@@ -94,11 +94,11 @@ func Test_Decode(t *testing.T) {
 
 			got, err := Decode(test.base)
 			if (err != nil) != test.wantErr {
-				t.Errorf("Decode() error = %v, wantErr %v", err, test.wantErr)
+				t.Errorf("Decode() error: %v | want: %v", err, test.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, test.want) {
-				t.Errorf("Decode() got = %v, want %v", got, test.want)
+				t.Errorf("Decode() got = %v | want: %v", got, test.want)
 			}
 		})
 	}

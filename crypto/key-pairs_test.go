@@ -8,34 +8,34 @@ import (
 	. "github.com/platsko/go-kit/crypto"
 )
 
-func Benchmark_GenerateKeyPair_Ed25519(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_GenerateKeyPair_Ed25519(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		if _, _, err := GenerateKeyPair(Ed25519); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_GenerateKeyPair_ECDSA(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_GenerateKeyPair_ECDSA(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		if _, _, err := GenerateKeyPair(ECDSA); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_GenerateKeyPair_RSA(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_GenerateKeyPair_RSA(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		if _, _, err := GenerateKeyPair(RSA); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
 
-func Benchmark_GenerateKeyPair_Secp256k1(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_GenerateKeyPair_Secp256k1(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		if _, _, err := GenerateKeyPair(Secp256k1); err != nil {
-			tb.Fatal(err)
+			b.Fatal(err)
 		}
 	}
 }
@@ -65,7 +65,7 @@ func Test_GenerateKeyPair(t *testing.T) {
 
 	tests = append(tests, testCase{
 		name:    "ERR",
-		algo:    Algo(-1), // nonexistent Algo
+		algo:    UNKNOWN,
 		wantErr: true,
 	})
 
