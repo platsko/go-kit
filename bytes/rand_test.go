@@ -8,10 +8,10 @@ import (
 	. "github.com/platsko/go-kit/bytes"
 )
 
-func Benchmark_RandBytes(tb *testing.B) {
+func Benchmark_RandBytes(b *testing.B) {
 	const size = 1024
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = RandBytes(size)
 	}
 }

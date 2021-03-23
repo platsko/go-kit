@@ -12,16 +12,16 @@ var (
 	defaultDictRand = GetDictRand()
 )
 
-func Benchmark_GetDictRand(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_GetDictRand(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = GetDictRand()
 	}
 }
 
-func Benchmark_SetDictRand(tb *testing.B) {
+func Benchmark_SetDictRand(b *testing.B) {
 	dict := GetDictRand()
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		SetDictRand(dict)
 	}
 }

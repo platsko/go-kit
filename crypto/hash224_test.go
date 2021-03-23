@@ -22,55 +22,55 @@ var (
 	)
 )
 
-func Benchmark_NewHash224(tb *testing.B) {
+func Benchmark_NewHash224(b *testing.B) {
 	b1 := bytes.RandBytes(128)
 	b2 := bytes.RandBytes(256)
 	b3 := bytes.RandBytes(512)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = NewHash224(b1, b2, b3)
 	}
 }
 
-func Benchmark_StrToHash224(tb *testing.B) {
+func Benchmark_StrToHash224(b *testing.B) {
 	s1 := strings.RandString(16)
 	s2 := strings.RandString(32)
 	s3 := strings.RandString(64)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = StrToHash224(s1, s2, s3)
 	}
 }
 
-func Benchmark_Hash224_Base58(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_Hash224_Base58(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = h224.Base58()
 	}
 }
 
-func Benchmark_Hash224_Empty(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_Hash224_Empty(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = Hash224{}.Empty()
 	}
 }
 
-func Benchmark_Hash224_Encode(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_Hash224_Encode(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = h224.Encode()
 	}
 }
 
-func Benchmark_Hash224_Hamming(tb *testing.B) {
+func Benchmark_Hash224_Hamming(b *testing.B) {
 	v224 := [Hash224Size]byte{}
 	copy(v224[:], bytes.RandBytes(160))
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		_ = h224.Hamming(v224)
 	}
 }
 
-func Benchmark_Hash224_String(tb *testing.B) {
-	for i := 0; i < tb.N; i++ {
+func Benchmark_Hash224_String(b *testing.B) {
+	for i := 0; i < b.N; i++ {
 		_ = h224.String()
 	}
 }

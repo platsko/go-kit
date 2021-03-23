@@ -9,34 +9,34 @@ import (
 	. "github.com/platsko/go-kit/zero"
 )
 
-func Benchmark_Bytea28(tb *testing.B) {
+func Benchmark_Bytea28(b *testing.B) {
 	b224 := [28]byte{}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		Bytea28(&b224)
 	}
 }
 
-func Benchmark_Bytea32(tb *testing.B) {
+func Benchmark_Bytea32(b *testing.B) {
 	b256 := [32]byte{}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		Bytea32(&b256)
 	}
 }
 
-func Benchmark_Bytea64(tb *testing.B) {
+func Benchmark_Bytea64(b *testing.B) {
 	b512 := [64]byte{}
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		Bytea64(&b512)
 	}
 }
 
-func Benchmark_Bytes(tb *testing.B) {
+func Benchmark_Bytes(b *testing.B) {
 	blob := bytes.RandBytes(1024)
-	tb.ResetTimer()
-	for i := 0; i < tb.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		Bytes(blob)
 	}
 }
