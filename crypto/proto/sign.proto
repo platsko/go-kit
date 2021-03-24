@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package crypto.proto;
+package evenlab.crypto.proto;
 
 option go_package = "github.com/evenlab/go-kit/crypto/proto/pb";
 
