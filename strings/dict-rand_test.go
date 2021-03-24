@@ -5,7 +5,7 @@ package strings_test
 import (
 	"testing"
 
-	. "github.com/platsko/go-kit/strings"
+	. "github.com/evenlab/go-kit/strings"
 )
 
 var (

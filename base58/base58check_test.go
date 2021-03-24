@@ -7,9 +7,9 @@ import (
 	"reflect"
 	"testing"
 
-	. "github.com/platsko/go-kit/base58"
-	"github.com/platsko/go-kit/bytes"
-	"github.com/platsko/go-kit/errors"
+	. "github.com/evenlab/go-kit/base58"
+	"github.com/evenlab/go-kit/bytes"
+	"github.com/evenlab/go-kit/errors"
 )
 
 func Benchmark_CheckDecode(b *testing.B) {

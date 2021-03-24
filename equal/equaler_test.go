@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/platsko/go-kit/bytes"
-	. "github.com/platsko/go-kit/equal"
+	"github.com/evenlab/go-kit/bytes"
+	. "github.com/evenlab/go-kit/equal"
 )
 
 func Benchmark_BasicEqual(b *testing.B) {

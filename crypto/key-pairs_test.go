@@ -5,7 +5,7 @@ package crypto_test
 import (
 	"testing"
 
-	. "github.com/platsko/go-kit/crypto"
+	. "github.com/evenlab/go-kit/crypto"
 )
 
 func Benchmark_GenerateKeyPair_Ed25519(b *testing.B) {

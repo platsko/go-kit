@@ -8,10 +8,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/platsko/go-kit/base58"
-	"github.com/platsko/go-kit/bytes"
-	. "github.com/platsko/go-kit/crypto"
-	"github.com/platsko/go-kit/strings"
+	"github.com/evenlab/go-kit/base58"
+	"github.com/evenlab/go-kit/bytes"
+	. "github.com/evenlab/go-kit/crypto"
+	"github.com/evenlab/go-kit/strings"
 )
 
 var (

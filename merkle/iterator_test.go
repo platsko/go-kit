@@ -7,10 +7,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/platsko/go-kit/bytes"
-	"github.com/platsko/go-kit/crypto"
-	"github.com/platsko/go-kit/errors"
-	. "github.com/platsko/go-kit/merkle"
+	"github.com/evenlab/go-kit/bytes"
+	"github.com/evenlab/go-kit/crypto"
+	"github.com/evenlab/go-kit/errors"
+	. "github.com/evenlab/go-kit/merkle"
 )
 
 func Benchmark_NewIterator(b *testing.B) {

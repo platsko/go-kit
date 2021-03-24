@@ -3,7 +3,7 @@
 package merkle
 
 import (
-	"github.com/platsko/go-kit/errors"
+	"github.com/evenlab/go-kit/errors"
 )
 
 const (

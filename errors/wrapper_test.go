@@ -7,7 +7,7 @@ import (
 	"log"
 	"testing"
 
-	. "github.com/platsko/go-kit/errors"
+	. "github.com/evenlab/go-kit/errors"
 )
 
 func Benchmark_wrapper_Error(b *testing.B) {

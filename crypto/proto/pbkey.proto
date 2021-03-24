@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package crypto.proto;
 
-option go_package = "github.com/platsko/go-kit/crypto/proto/pb";
+option go_package = "github.com/evenlab/go-kit/crypto/proto/pb";
 
 message PublicKey {
   bytes blob = 1;

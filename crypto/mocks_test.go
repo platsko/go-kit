@@ -5,8 +5,8 @@ package crypto_test
 import (
 	cc "github.com/libp2p/go-libp2p-core/crypto"
 
-	"github.com/platsko/go-kit/bytes"
-	. "github.com/platsko/go-kit/crypto"
+	"github.com/evenlab/go-kit/bytes"
+	. "github.com/evenlab/go-kit/crypto"
 )
 
 func mockCryptoKeyPair(algo Algo) (cc.PrivKey, cc.PubKey) {

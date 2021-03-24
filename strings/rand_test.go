@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	. "github.com/platsko/go-kit/strings"
+	. "github.com/evenlab/go-kit/strings"
 )
 
 func Benchmark_RandString(b *testing.B) {

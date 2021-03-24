@@ -10,9 +10,9 @@ import (
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/platsko/go-kit/crypto/proto/pb"
-	"github.com/platsko/go-kit/equal"
-	"github.com/platsko/go-kit/errors"
+	"github.com/evenlab/go-kit/crypto/proto/pb"
+	"github.com/evenlab/go-kit/equal"
+	"github.com/evenlab/go-kit/errors"
 )
 
 type (

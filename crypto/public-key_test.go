@@ -13,8 +13,8 @@ import (
 	cc "github.com/libp2p/go-libp2p-core/crypto"
 	"google.golang.org/protobuf/proto"
 
-	. "github.com/platsko/go-kit/crypto"
-	"github.com/platsko/go-kit/crypto/proto/pb"
+	. "github.com/evenlab/go-kit/crypto"
+	"github.com/evenlab/go-kit/crypto/proto/pb"
 )
 
 func Benchmark_NewPublicKey(b *testing.B) {

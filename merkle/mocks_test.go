@@ -3,9 +3,9 @@
 package merkle_test
 
 import (
-	"github.com/platsko/go-kit/bytes"
-	"github.com/platsko/go-kit/crypto"
-	. "github.com/platsko/go-kit/merkle"
+	"github.com/evenlab/go-kit/bytes"
+	"github.com/evenlab/go-kit/crypto"
+	. "github.com/evenlab/go-kit/merkle"
 )
 
 func mockTreeStoreCase1() (TreeStore, Iterator) {

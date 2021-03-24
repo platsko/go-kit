@@ -5,7 +5,7 @@ package base58_test
 import (
 	"strings"
 
-	. "github.com/platsko/go-kit/base58"
+	. "github.com/evenlab/go-kit/base58"
 )
 
 type (

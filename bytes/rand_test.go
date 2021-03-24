@@ -5,7 +5,7 @@ package bytes_test
 import (
 	"testing"
 
-	. "github.com/platsko/go-kit/bytes"
+	. "github.com/evenlab/go-kit/bytes"
 )
 
 func Benchmark_RandBytes(b *testing.B) {

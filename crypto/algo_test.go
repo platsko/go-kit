@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	. "github.com/platsko/go-kit/crypto"
+	. "github.com/evenlab/go-kit/crypto"
 )
 
 func Benchmark_GetAlgos(b *testing.B) {

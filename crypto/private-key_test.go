@@ -8,7 +8,7 @@ import (
 
 	cc "github.com/libp2p/go-libp2p-core/crypto"
 
-	. "github.com/platsko/go-kit/crypto"
+	. "github.com/evenlab/go-kit/crypto"
 )
 
 func Benchmark_NewPrivateKey(b *testing.B) {

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package misc.time.proto;
 
-option go_package = "github.com/platsko/go-kit/timestamp/proto/pb";
+option go_package = "github.com/evenlab/go-kit/timestamp/proto/pb";
 
 message Timestamp {
   bytes blob = 1;

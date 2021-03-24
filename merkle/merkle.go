@@ -5,8 +5,8 @@ package merkle
 import (
 	"math"
 
-	"github.com/platsko/go-kit/crypto"
-	"github.com/platsko/go-kit/errors"
+	"github.com/evenlab/go-kit/crypto"
+	"github.com/evenlab/go-kit/errors"
 )
 
 const (

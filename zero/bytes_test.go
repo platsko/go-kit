@@ -5,8 +5,8 @@ package zero_test
 import (
 	"testing"
 
-	"github.com/platsko/go-kit/bytes"
-	. "github.com/platsko/go-kit/zero"
+	"github.com/evenlab/go-kit/bytes"
+	. "github.com/evenlab/go-kit/zero"
 )
 
 func Benchmark_Bytea28(b *testing.B) {

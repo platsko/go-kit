@@ -5,8 +5,8 @@ package equal
 import (
 	"crypto/subtle"
 
-	"github.com/platsko/go-kit/bytes"
-	"github.com/platsko/go-kit/errors"
+	"github.com/evenlab/go-kit/bytes"
+	"github.com/evenlab/go-kit/errors"
 )
 
 type (

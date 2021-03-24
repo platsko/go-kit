@@ -5,7 +5,7 @@ package strings
 import (
 	"strings"
 
-	"github.com/platsko/go-kit/bytes"
+	"github.com/evenlab/go-kit/bytes"
 )
 
 // RandString returns random generated string with given size.
