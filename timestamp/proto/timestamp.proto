@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package misc.time.proto;
+package kit.timestamp.proto;
 
 option go_package = "github.com/platsko/go-kit/timestamp/proto/pb";
 
