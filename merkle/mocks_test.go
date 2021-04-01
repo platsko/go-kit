@@ -3,6 +3,8 @@
 package merkle_test
 
 import (
+	"log"
+
 	"github.com/platsko/go-kit/bytes"
 	"github.com/platsko/go-kit/crypto"
 	. "github.com/platsko/go-kit/merkle"
@@ -10,11 +12,15 @@ import (
 
 func mockTreeStoreCase1() (TreeStore, Iterator) {
 	const size = 1
+	var err error
 
 	iter, h256 := mockIterable(size), crypto.Hash256{}
 
 	h := make([]crypto.Hash256, size)
-	h[0], _ = iter.HasherNext().Hash()
+	h[0], err = iter.HasherNext().Hash()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	root := crypto.NewHash256(h[0][:], h[0][:]) // double one use h[0] because we've no h[1]
 
@@ -30,12 +36,16 @@ func mockTreeStoreCase1() (TreeStore, Iterator) {
 
 func mockTreeStoreCase5() (TreeStore, Iterator) {
 	const size = 5
+	var err error
 
 	iter, h256 := mockIterable(size), crypto.Hash256{}
 
 	h := make([]crypto.Hash256, size)
 	for idx := 0; iter.HasNext(); idx++ {
-		h[idx], _ = iter.HasherNext().Hash()
+		h[idx], err = iter.HasherNext().Hash()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	h0h1 := crypto.NewHash256(h[0][:], h[1][:])

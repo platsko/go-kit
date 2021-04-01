@@ -264,7 +264,7 @@ func Test_Iterator_Rewind(t *testing.T) {
 	iter := NewIterator(blob)
 
 	for iter.HasNext() { // enforce fast forward of iter list
-		iter.HasherNext()
+		_ = iter.HasherNext()
 	}
 
 	tests := []struct {
@@ -285,7 +285,7 @@ func Test_Iterator_Rewind(t *testing.T) {
 			t.Parallel()
 
 			if reflect.DeepEqual(test.iter, test.want) {
-				t.Errorf("Rewind() got: %v | want: %v", test.iter, test.want)
+				t.Errorf("Rewind() got: %v | unwant: %v", test.iter, test.want)
 			}
 			if got := test.iter.Rewind(); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("Rewind() got: %v | want: %v", got, test.want)
