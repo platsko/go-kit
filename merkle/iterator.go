@@ -16,8 +16,8 @@ type (
 
 	// Iterator represents interface for types which can iterate by themselves.
 	Iterator interface {
-		// HasherNext returns Hasher interface for the current item of list,
-		// and then move the internal cursor the the next list's item.
+		// HasherNext returns Hasher interface for the current list item
+		// and then increase the internal cursor to the next index of the list item.
 		// NOTICE: returns nil if there is no current element.
 		HasherNext() crypto.Hasher
 
