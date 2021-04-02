@@ -5,7 +5,6 @@ package equal
 import (
 	"crypto/subtle"
 
-	"github.com/evenlab/go-kit/bytes"
 	"github.com/evenlab/go-kit/errors"
 )
 
@@ -43,7 +42,7 @@ func BasicEqual(e1, e2 Equaler) bool {
 		return false
 	}
 
-	return subtle.ConstantTimeCompare(b1, b2) == 1 || bytes.Equal(b1, b2)
+	return subtle.ConstantTimeCompare(b1, b2) == 1
 }
 
 // NewEqualer constructs Equaler interface with provided raw bytes data.
