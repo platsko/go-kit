@@ -8,6 +8,8 @@
 
 ## `choco` Setup Chocolatey CLI
 
+> For latest setup info see [Chocolatey CLI Documentation](https://docs.chocolatey.org/en-us/choco/setup)
+
 ### Requirements:
 * Windows 7+ / Windows Server 2003+
 * PowerShell v2+ (Not PowerShell Core yet though)(minimum is v3 for install from this website due to TLS 1.2 requirement)
