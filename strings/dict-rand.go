@@ -14,16 +14,16 @@ var (
 
 // GetDictRand returns current use dictionary chars for rand.
 func GetDictRand() string {
-	rwDictMutex.Lock()
+	rwDictMutex.RLock()
 	dict := dictRandChars
-	rwDictMutex.Unlock()
+	rwDictMutex.RUnlock()
 
 	return dict
 }
 
 // SetDictRand sets new dictionary chars to use for rand.
 func SetDictRand(s string) {
-	rwDictMutex.RLock()
+	rwDictMutex.Lock()
 	dictRandChars = s
-	rwDictMutex.RUnlock()
+	rwDictMutex.Unlock()
 }

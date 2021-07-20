@@ -34,7 +34,7 @@ func Unwrap(err error) error {
 func WrapErr(s string, w error) error {
 	return &wrapper{
 		err: w,
-		txt: s + delimiter + w.Error(),
+		txt: s + GetDelimiter() + w.Error(),
 	}
 }
 
@@ -43,6 +43,6 @@ func WrapErr(s string, w error) error {
 func WrapStr(s, w string) error {
 	return &wrapper{
 		err: New(w),
-		txt: s + delimiter + w,
+		txt: s + GetDelimiter() + w,
 	}
 }

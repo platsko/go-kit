@@ -10,9 +10,10 @@ import (
 
 // RandString returns random generated string with given size.
 func RandString(size int) string {
-	blob, builder, dictSize := bytes.RandBytes(size), strings.Builder{}, len(dictRandChars)
+	s := GetDictRand()
+	blob, builder, dictSize := bytes.RandBytes(size), strings.Builder{}, len(s)
 	for i := 0; i < size; i++ {
-		blob[i] = dictRandChars[int(blob[i])%dictSize]
+		blob[i] = s[int(blob[i])%dictSize]
 	}
 
 	_, _ = builder.Write(blob)
